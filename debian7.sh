@@ -39,7 +39,7 @@ sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 service ssh restart
 
 # set repo
-wget -q -O /etc/apt/sources.list https://raw.githubusercontent.com/wilkingdead/setup2/master/sources.list.debian7
+wget -q -O /etc/apt/sources.list https://raw.githubusercontent.com/naharmc/refund/master/sources.list.debian7
 wget "http://www.dotdeb.org/dotdeb.gpg"
 wget "http://www.webmin.com/jcameron-key.asc"
 cat dotdeb.gpg | apt-key add -;rm dotdeb.gpg
@@ -78,7 +78,7 @@ service vnstat restart
 
 # install screenfetch
 cd
-wget https://raw.githubusercontent.com/wilkingdead/setup2/master/screenfetch-dev
+wget https://raw.githubusercontent.com/naharmc/refund/master/screenfetch-dev
 mv screenfetch-dev /usr/bin/screenfetch-dev
 chmod +x /usr/bin/screenfetch-dev
 echo "clear" >> .profile
@@ -88,11 +88,11 @@ echo "screenfetch-dev" >> .profile
 cd
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/wilkingdead/setup2/master/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/naharmc/refund/master/nginx.conf"
 mkdir -p /home/vps/public_html
-echo "<pre>Setup by Ibnu Fachrizal</pre>" > /home/vps/public_html/index.html
+echo "<pre>Setup</pre>" > /home/vps/public_html/index.html
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/wilkingdead/setup2/master/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/naharmc/refund/master/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
 service php5-fpm restart
 service nginx restart
@@ -124,7 +124,7 @@ cd
 
 #install ovpn
 cd
-wget -q https://raw.githubusercontent.com/wilkingdead/setup2/master/openvpn.sh
+wget -q https://raw.githubusercontent.com/naharmc/refund/master/openvpn.sh
 mv ./openvpn.sh /usr/bin/openvpn.sh
 chmod +x /usr/bin/openvpn.sh
 
@@ -133,36 +133,6 @@ wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/wilkingdead/set
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
-
-#install PPTP
-apt-get -y install pptpd
-cat > /etc/ppp/pptpd-options <<END
-name pptpd
-refuse-pap
-refuse-chap
-refuse-mschap
-require-mschap-v2
-require-mppe-128
-ms-dns 8.8.8.8
-ms-dns 8.8.4.4
-proxyarp
-nodefaultroute
-lock
-nobsdcomp
-END
-
-cat > /etc/pptpd.conf <<END
-option /etc/ppp/pptpd-options
-logwtmp
-localip 10.1.0.1
-remoteip 10.1.0.5-100
-END
-
-cat >> /etc/ppp/ip-up <<END
-ifconfig ppp0 mtu 1400
-END
-mkdir /var/lib/premium-script
-/etc/init.d/pptpd restart
 
 # install mrtg
 apt-get -y install snmpd;
